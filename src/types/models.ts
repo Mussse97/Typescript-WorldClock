@@ -1,11 +1,11 @@
-// src/types/models.ts
-export type TimeFormat = "digital" | "analog"; // future-proofing
+
+export type TimeFormat = "digital" | "analog"; 
 
 
 export interface City {
 id: string; // slug or uuid
-name: string; // e.g., "Stockholm"
-country: string; // e.g., "Sweden"
+name: string; 
+country: string; 
 timezone: TimeZone; // string literal type below
 coordinates?: { lat: number; lng: number }; // optional for later map
 imageUrl?: string; // used on detail page later
@@ -13,7 +13,7 @@ imageUrl?: string; // used on detail page later
 
 
 // String literal types for time zones we include in our dataset.
-// You can expand this list as you add more cities.
+// We can add to this list as needed.
 export type TimeZone =
 | "Europe/Stockholm"
 | "Europe/London"

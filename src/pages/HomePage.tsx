@@ -1,17 +1,23 @@
-// src/pages/HomePage.tsx
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import TimeBadge from "../components/TimeBadge";
 import CurrentLocation from "../components/CurrentLocation";
 import cities from "../data/cities.json";
 import type { City } from "../types/models";
 import { useNow } from "../hooks/useNow";
+import { saveCities, loadCities } from "../utils/localStorage";
 import "../styles/globals.css";
 
-const HomePage: React.FC = () => {
+function HomePage() {
   const [query, setQuery] = useState<string>("");
-  const [selected, setSelected] = useState<City | null>(null);
+  const [selectedCities, setSelectedCities] = useState<City[]>([]);
   const now = useNow(1000);
+
+  // Ladda valda städer från localStorage vid mount
+  useEffect(() => {
+    const saved = loadCities();
+    setSelectedCities(saved);
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -23,55 +29,82 @@ const HomePage: React.FC = () => {
     );
   }, [query]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setQuery(e.target.value);
+  }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (results.length > 0) setSelected(results[0]);
-  };
+    if (results.length === 0) return;
+
+    const cityToAdd = results[0];
+
+    // Kontrollera om staden redan finns
+    if (!selectedCities.some((c) => c.id === cityToAdd.id)) {
+      const newList = [...selectedCities, cityToAdd];
+      setSelectedCities(newList);
+      saveCities(newList);
+    }
+  }
+
+  function removeCity(id: string) {
+    const newList = selectedCities.filter((c) => c.id !== id);
+    setSelectedCities(newList);
+    saveCities(newList);
+  }
 
   return (
     <div className="container">
       <h1 className="title">What time is it around the world?</h1>
 
-      {/* sökfält */}
       <SearchBar value={query} onChange={onChange} onSubmit={onSubmit} />
 
-      {/* användarens nuvarande plats */}
+      {/* Current location */}
       <CurrentLocation />
 
-      {/* sökresultat */}
-      {results.length > 0 && (
-        <div className="results">
+      <h2>Valda städer</h2>
+
+      {/* Valda städer */}
+      {selectedCities.length > 0 && (
+        <section className="selected-cities">
+          {selectedCities.map((city) => (
+            <div key={city.id} className="city-card">
+              <TimeBadge
+                id={city.id}
+                cityName={city.name}
+                country={city.country}
+                timezone={city.timezone}
+                now={now}
+              />
+              <button
+                className="remove-btn"
+                onClick={() => removeCity(city.id)}
+                aria-label={`Remove ${city.name}`}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Sökresultat */}
+      {query && results.length > 0 && (
+        <section className="results">
           {results.map((city) => (
             <TimeBadge
               key={city.id}
+              id={city.id}
               cityName={city.name}
               country={city.country}
               timezone={city.timezone}
               now={now}
             />
           ))}
-        </div>
-      )}
-
-      {/* vald stad */}
-      {selected && (
-        <div className="selected">
-          <h2>
-            {selected.name}, {selected.country}
-          </h2>
-          <TimeBadge
-            cityName={selected.name}
-            country={selected.country}
-            timezone={selected.timezone}
-            now={now}
-          />
-        </div>
+        </section>
       )}
     </div>
   );
-};
+}
 
 export default HomePage;
