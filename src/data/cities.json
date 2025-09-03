@@ -1,0 +1,16 @@
+[
+{"id":"stockholm","name":"Stockholm","country":"Sweden","timezone":"Europe/Stockholm","coordinates":{"lat":59.3293,"lng":18.0686},"imageUrl":"/images/stockholm.jpg"},
+{"id":"london","name":"London","country":"United Kingdom","timezone":"Europe/London","coordinates":{"lat":51.5074,"lng":-0.1278},"imageUrl":"/images/london.jpg"},
+{"id":"paris","name":"Paris","country":"France","timezone":"Europe/Paris","coordinates":{"lat":48.8566,"lng":2.3522},"imageUrl":"/images/paris.jpg"},
+{"id":"berlin","name":"Berlin","country":"Germany","timezone":"Europe/Berlin","coordinates":{"lat":52.52,"lng":13.405},"imageUrl":"/images/berlin.jpg"},
+{"id":"newyork","name":"New York","country":"USA","timezone":"America/New_York","coordinates":{"lat":40.7128,"lng":-74.006},"imageUrl":"/images/newyork.jpg"},
+{"id":"losangeles","name":"Los Angeles","country":"USA","timezone":"America/Los_Angeles","coordinates":{"lat":34.0522,"lng":-118.2437},"imageUrl":"/images/losangeles.jpg"},
+{"id":"chicago","name":"Chicago","country":"USA","timezone":"America/Chicago","coordinates":{"lat":41.8781,"lng":-87.6298},"imageUrl":"/images/chicago.jpg"},
+{"id":"saopaulo","name":"São Paulo","country":"Brazil","timezone":"America/Sao_Paulo","coordinates":{"lat":-23.5505,"lng":-46.6333},"imageUrl":"/images/saopaulo.jpg"},
+{"id":"tokyo","name":"Tokyo","country":"Japan","timezone":"Asia/Tokyo","coordinates":{"lat":35.6895,"lng":139.6917},"imageUrl":"/images/tokyo.jpg"},
+{"id":"shanghai","name":"Shanghai","country":"China","timezone":"Asia/Shanghai","coordinates":{"lat":31.2304,"lng":121.4737},"imageUrl":"/images/shanghai.jpg"},
+{"id":"dubai","name":"Dubai","country":"UAE","timezone":"Asia/Dubai","coordinates":{"lat":25.2048,"lng":55.2708},"imageUrl":"/images/dubai.jpg"},
+{"id":"kolkata","name":"Kolkata","country":"India","timezone":"Asia/Kolkata","coordinates":{"lat":22.5726,"lng":88.3639},"imageUrl":"/images/kolkata.jpg"},
+{"id":"sydney","name":"Sydney","country":"Australia","timezone":"Australia/Sydney","coordinates":{"lat":-33.8688,"lng":151.2093},"imageUrl":"/images/sydney.jpg"},
+{"id":"johannesburg","name":"Johannesburg","country":"South Africa","timezone":"Africa/Johannesburg","coordinates":{"lat":-26.2041,"lng":28.0473},"imageUrl":"/images/johannesburg.jpg"}
+]
