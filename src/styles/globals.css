@@ -1,4 +1,4 @@
-/* src/styles/globals.css (search styles part) */
+
 :root { --radius: 14px; }
 
 
@@ -68,6 +68,72 @@ cursor: pointer;
   font-size: 18px;
   cursor: pointer;
   color: red;
+}
+
+
+.analog-clock {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border: 4px solid white;
+  border-radius: 50%;
+  margin: 20px auto;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  background: white;
+}
+
+.hand.hour {
+  width: 6px;
+  height: 40px;
+}
+
+.hand.minute {
+  width: 4px;
+  height: 55px;
+}
+
+.hand.second {
+  width: 2px;
+  height: 65px;
+  background: red;
+}
+
+.center-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clock-toggle {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.clock-toggle button {
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+}
+
+.clock-toggle button.active {
+  background: white;
+  color: black;
 }
 
 

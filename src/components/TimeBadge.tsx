@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Link } from "react-router";
 import { formatLocalTime } from "../utils/time";
 
@@ -13,7 +12,7 @@ interface TimeBadgeProps {
   onRemove?: () => void;
 }
 
-const TimeBadge: React.FC<TimeBadgeProps> = ({
+function TimeBadge({
   id,
   cityName,
   country,
@@ -21,7 +20,8 @@ const TimeBadge: React.FC<TimeBadgeProps> = ({
   now,
   removable,
   onRemove,
-}) => {
+}: TimeBadgeProps) {
+  
   return (
     <div className="card" aria-live="polite">
       <Link to={`/city/${id}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -29,22 +29,30 @@ const TimeBadge: React.FC<TimeBadgeProps> = ({
           {cityName}, {country}
         </h2>
         <div style={{ fontSize: 28, fontVariantNumeric: "tabular-nums" }}>
-          {formatLocalTime(timezone, {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }, now)}
+          {formatLocalTime(
+            timezone,
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            },
+            now
+          )}
         </div>
         <div style={{ opacity: 0.7, marginTop: 4 }}>{timezone}</div>
       </Link>
 
       {removable && onRemove && (
-        <button className="remove-btn" onClick={onRemove} aria-label={`Remove ${cityName}`}>
+        <button
+          className="remove-btn"
+          onClick={onRemove}
+          aria-label={`Remove ${cityName}`}
+        >
           ×
         </button>
       )}
     </div>
   );
-};
+}
 
 export default TimeBadge;

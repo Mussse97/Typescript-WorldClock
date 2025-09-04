@@ -1,15 +1,30 @@
-/* src/styles/CityDetailPage.css */
 .city-detail {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center;   /* Centra horisontellt */
+  align-items: center;       /* Centra vertikalt */
+  min-height: 100vh;         /* Gör så att det täcker hela skärmen */
   text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .city-detail .overlay {
   background: rgba(0, 0, 0, 0.5);
   padding: 2rem;
   border-radius: 12px;
+  max-width: 600px;          /* Gör att den inte blir för bred på stora skärmar */
+  width: 100%;               /* Låt den krympa på små skärmar */
+}
+
+.city-detail h1 {
+  margin-bottom: 1rem;
+}
+
+.clock-toggle {
+  display: flex;
+  justify-content: center;   /* Gör att knapparna ligger centrerade */
+  gap: 10px;
+  margin: 1rem 0;
 }
 
 .back-link {

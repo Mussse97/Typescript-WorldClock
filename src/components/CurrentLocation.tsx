@@ -1,4 +1,4 @@
-// src/components/CurrentLocation.tsx
+
 import { useMemo } from "react";
 import { useNow } from "../hooks/useNow";
 import { getBrowserTimeZone } from "../utils/time";
@@ -34,9 +34,6 @@ function CurrentLocation() {
   );
 }
 
-export default CurrentLocation;
-
-// --- local helpers for UI ---
 
 function TimeSectionTitle({ title }: { title: string }) {
   return <h3 style={{ margin: "16px 0 8px" }}>{title}</h3>;
@@ -53,3 +50,5 @@ function TimeRow({ city, now }: { city: City; now: Date }) {
     />
   );
 }
+
+export default CurrentLocation;
