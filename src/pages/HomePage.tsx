@@ -2,18 +2,20 @@ import React, { useMemo, useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import TimeBadge from "../components/TimeBadge";
 import CurrentLocation from "../components/CurrentLocation";
+import AddCityForm from "../components/addCityForm";
+
 import cities from "../data/cities.json";
 import type { City } from "../types/models";
 import { useNow } from "../hooks/useNow";
 import { saveCities, loadCities } from "../utils/localStorage";
 import "../styles/globals.css";
 
-function HomePage() {
+  function HomePage() {
   const [query, setQuery] = useState<string>("");
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
   const now = useNow(1000);
 
-  // Ladda valda städer från localStorage vid mount
+  // Load selected cities from localStorage on mount
   useEffect(() => {
     const saved = loadCities();
     setSelectedCities(saved);
@@ -29,6 +31,10 @@ function HomePage() {
     );
   }, [query]);
 
+   function handleAddCity(city: City) {
+    setSelectedCities((prev) => [...prev, city]);
+  }
+
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setQuery(e.target.value);
   }
@@ -39,7 +45,7 @@ function HomePage() {
 
     const cityToAdd = results[0];
 
-    // Kontrollera om staden redan finns
+    // Makes sure no duplicates
     if (!selectedCities.some((c) => c.id === cityToAdd.id)) {
       const newList = [...selectedCities, cityToAdd];
       setSelectedCities(newList);
@@ -58,13 +64,17 @@ function HomePage() {
       <h1 className="title">What time is it around the world?</h1>
 
       <SearchBar value={query} onChange={onChange} onSubmit={onSubmit} />
+      
+      {/* Ny sektion för egna städer */}
+      <h2>Add your own city</h2>
+      <AddCityForm onAdd={handleAddCity} />
 
-      {/* Current location */}
+
+
       <CurrentLocation />
 
       <h2>Valda städer</h2>
-
-      {/* Valda städer */}
+      
       {selectedCities.length > 0 && (
         <section className="selected-cities">
           {selectedCities.map((city) => (
@@ -88,7 +98,7 @@ function HomePage() {
         </section>
       )}
 
-      {/* Sökresultat */}
+      
       {query && results.length > 0 && (
         <section className="results">
           {results.map((city) => (

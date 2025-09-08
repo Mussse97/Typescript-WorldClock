@@ -6,9 +6,10 @@ export interface City {
 id: string; // slug or uuid
 name: string; 
 country: string; 
-timezone: TimeZone; // string literal type below
+timezone: string; // string literal type below
 coordinates?: { lat: number; lng: number }; // optional for later map
 imageUrl?: string; // used on detail page later
+
 }
 
 

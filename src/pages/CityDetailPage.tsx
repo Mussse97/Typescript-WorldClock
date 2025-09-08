@@ -1,26 +1,24 @@
-// src/pages/CityDetailPage.tsx
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import cities from "../data/cities.json";
 import type { City } from "../types/models";
 import { formatLocalTime } from "../utils/time";
 import { useNow } from "../hooks/useNow";
+import { loadCities } from "../utils/localStorage";  // Komma åt egna tillagda städer
 import "../styles/CityDetailPage.css";
+import fallbackImage from "../assets/world.jpg"; // 👈 Lägg en neutral bild i assets-mappen
 
-// AnalogClock-komponent
+// Analog clock component
 function AnalogClock({ now, timezone }: { now: Date; timezone: string }) {
-  // konvertera till stadens tid
-  const local = new Date(
-    now.toLocaleString("en-US", { timeZone: timezone })
-  );
+  const local = new Date(now.toLocaleString("en-US", { timeZone: timezone }));
 
   const seconds = local.getSeconds();
   const minutes = local.getMinutes();
   const hours = local.getHours();
 
-  const secDeg = seconds * 6; // 360 / 60
+  const secDeg = seconds * 6;
   const minDeg = minutes * 6;
-  const hourDeg = hours * 30 + minutes * 0.5; // 360/12 + minute offset
+  const hourDeg = hours * 30 + minutes * 0.5;
 
   return (
     <div className="analog-clock">
@@ -36,18 +34,22 @@ function CityDetailPage() {
   const { id } = useParams<{ id: string }>();
   const now = useNow(1000);
 
-  const city = (cities as City[]).find((c) => c.id === id);
+  // 👇 kombinera JSON-städerna med de från localStorage
+  const allCities: City[] = [
+    ...(cities as City[]),
+    ...loadCities(),
+  ];
+
+  const city = allCities.find((c) => c.id === id);
   const storageKey = `clockType-${id}`;
 
   const [clockType, setClockType] = useState<"digital" | "analog">("digital");
 
-  // Ladda från localStorage
   useEffect(() => {
     const saved = localStorage.getItem(storageKey) as "digital" | "analog" | null;
     if (saved) setClockType(saved);
   }, [storageKey]);
 
-  // Spara i localStorage när användaren ändrar
   useEffect(() => {
     localStorage.setItem(storageKey, clockType);
   }, [clockType, storageKey]);
@@ -61,11 +63,15 @@ function CityDetailPage() {
     );
   }
 
+  const backgroundImage = city.imageUrl && city.imageUrl.trim() !== ""
+    ? city.imageUrl
+    : fallbackImage;
+  
   return (
     <div
       className="city-detail"
       style={{
-        backgroundImage: `url(${city.imageUrl})`,
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -78,14 +84,12 @@ function CityDetailPage() {
           {city.name}, {city.country}
         </h1>
 
-        {/* Toggle knappar */}
         <div className="clock-toggle">
           <button
             onClick={() => setClockType("digital")}
             className={clockType === "digital" ? "active" : ""}
             aria-label="Show digital clock"
           >
-            {/* Din digital-ikon SVG här */}
             🖥️
           </button>
           <button
@@ -93,19 +97,17 @@ function CityDetailPage() {
             className={clockType === "analog" ? "active" : ""}
             aria-label="Show analog clock"
           >
-            {/* Din analog-ikon SVG här */}
             🕒
           </button>
         </div>
 
-        {/* Rendera klockan */}
         {clockType === "digital" ? (
           <p style={{ fontSize: "2rem" }}>
-            {formatLocalTime(city.timezone, {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            }, now)}
+            {formatLocalTime(
+              city.timezone,
+              { hour: "2-digit", minute: "2-digit", second: "2-digit" },
+              now
+            )}
           </p>
         ) : (
           <AnalogClock now={now} timezone={city.timezone} />

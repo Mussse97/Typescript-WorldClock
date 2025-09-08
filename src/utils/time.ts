@@ -6,7 +6,7 @@ export function formatLocalTime(
     minute: "2-digit",
     second: "2-digit",
   },
-  now: Date = new Date() // default till Date() om inget skickas in
+  now: Date = new Date() // default date if not provided
 ): string {
   return now.toLocaleTimeString([], { timeZone: tz, ...opts });
 }
