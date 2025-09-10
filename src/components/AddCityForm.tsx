@@ -1,35 +1,31 @@
 import { useState } from "react";
-import { saveCities, loadCities } from "../utils/localStorage";
-import type { City } from "../types/models";
+import type { CityDraft } from "../types/models";
 
 interface AddCityFormProps {
-  onAdd: (city: City) => void;
+  onAdd: (city: CityDraft) => void;
 }
 
-function AddCityForm({ onAdd }: AddCityFormProps) {
+export default function AddCityForm({ onAdd }: AddCityFormProps) {
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [timezone, setTimezone] = useState("");
 
-  const timezones = Intl.supportedValuesOf("timeZone"); // alla tillgängliga tidszoner
+  // Alla stödja tidszoner
+  const timezones = Intl.supportedValuesOf("timeZone");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name || !timezone) return;
 
-    const newCity: City = {
-      id: crypto.randomUUID(),
+    const newCity: CityDraft = {
       name,
       country: country || "Custom",
       timezone,
     };
 
-    // uppdatera localStorage direkt
-    const saved = loadCities();
-    const updated = [...saved, newCity];
-    saveCities(updated);
-
     onAdd(newCity);
+
+    // Rensa formulärfält
     setName("");
     setCountry("");
     setTimezone("");
@@ -50,7 +46,11 @@ function AddCityForm({ onAdd }: AddCityFormProps) {
         value={country}
         onChange={(e) => setCountry(e.target.value)}
       />
-      <select value={timezone} onChange={(e) => setTimezone(e.target.value)} required>
+      <select
+        value={timezone}
+        onChange={(e) => setTimezone(e.target.value)}
+        required
+      >
         <option value="">Select timezone</option>
         {timezones.map((tz) => (
           <option key={tz} value={tz}>
@@ -62,5 +62,3 @@ function AddCityForm({ onAdd }: AddCityFormProps) {
     </form>
   );
 }
-
-export default AddCityForm;

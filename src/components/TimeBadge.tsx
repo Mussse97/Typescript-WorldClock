@@ -7,17 +7,17 @@ interface TimeBadgeProps {
   cityName: string;
   country: string;
   timezone: string;
-  now: Date;
+  currentTime: Date;
   removable?: boolean;
   onRemove?: () => void;
 }
 
-function TimeBadge({
+export default function TimeBadge({
   id,
   cityName,
   country,
   timezone,
-  now,
+  currentTime,
   removable,
   onRemove,
 }: TimeBadgeProps) {
@@ -36,7 +36,7 @@ function TimeBadge({
               minute: "2-digit",
               second: "2-digit",
             },
-            now
+            currentTime
           )}
         </div>
         <div style={{ opacity: 0.7, marginTop: 4 }}>{timezone}</div>
@@ -55,4 +55,3 @@ function TimeBadge({
   );
 }
 
-export default TimeBadge;

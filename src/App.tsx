@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import HomePage from "./pages/HomePage";
 import CityDetailPage from "./pages/CityDetailPage";
 
-function App() {
+export default function App() {
   return (
     <Router>
       <Routes>
@@ -14,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+

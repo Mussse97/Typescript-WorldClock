@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import cities from "../data/cities.json";
 import type { City } from "../types/models";
+import { isCity } from "../types/models";
 import { formatLocalTime } from "../utils/time";
-import { useNow } from "../hooks/useNow";
-import { loadCities } from "../utils/localStorage";  // Komma åt egna tillagda städer
+import { usecurrentTime } from "../hooks/useCurrentTime";
+import { loadCities } from "../utils/localStorage";
 import "../styles/CityDetailPage.css";
-import fallbackImage from "../assets/world.jpg"; // 👈 Lägg en neutral bild i assets-mappen
+import fallbackImage from "../assets/world.jpg";
 
 // Analog clock component
-function AnalogClock({ now, timezone }: { now: Date; timezone: string }) {
-  const local = new Date(now.toLocaleString("en-US", { timeZone: timezone }));
+function AnalogClock({ currentTime, timezone }: { currentTime: Date; timezone: string }) {
+  const local = new Date(currentTime.toLocaleString("en-US", { timeZone: timezone }));
 
   const seconds = local.getSeconds();
   const minutes = local.getMinutes();
@@ -30,17 +31,27 @@ function AnalogClock({ now, timezone }: { now: Date; timezone: string }) {
   );
 }
 
-function CityDetailPage() {
+export default function CityDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const now = useNow(1000);
+  const currentTime = usecurrentTime(1000);
 
-  // 👇 kombinera JSON-städerna med de från localStorage
-  const allCities: City[] = [
-    ...(cities as City[]),
-    ...loadCities(),
-  ];
+  // Combining built-in cities with user-added cities
+  const allCities: City[] = [...(cities as City[]), ...loadCities()];
 
-  const city = allCities.find((c) => c.id === id);
+  // find right city by id from params
+  const cityCandidate = allCities.find((c) => c.id === id);
+
+  // Type guard
+  if (!isCity(cityCandidate)) {
+    return (
+      <div className="container">
+        <h2>City not found</h2>
+        <Link to="/">Go back</Link>
+      </div>
+    );
+  }
+
+  const city = cityCandidate;
   const storageKey = `clockType-${id}`;
 
   const [clockType, setClockType] = useState<"digital" | "analog">("digital");
@@ -54,19 +65,9 @@ function CityDetailPage() {
     localStorage.setItem(storageKey, clockType);
   }, [clockType, storageKey]);
 
-  if (!city) {
-    return (
-      <div className="container">
-        <h2>City not found</h2>
-        <Link to="/">Go back</Link>
-      </div>
-    );
-  }
+  const backgroundImage =
+    city.imageUrl && city.imageUrl.trim() !== "" ? city.imageUrl : fallbackImage;
 
-  const backgroundImage = city.imageUrl && city.imageUrl.trim() !== ""
-    ? city.imageUrl
-    : fallbackImage;
-  
   return (
     <div
       className="city-detail"
@@ -106,11 +107,11 @@ function CityDetailPage() {
             {formatLocalTime(
               city.timezone,
               { hour: "2-digit", minute: "2-digit", second: "2-digit" },
-              now
+              currentTime
             )}
           </p>
         ) : (
-          <AnalogClock now={now} timezone={city.timezone} />
+          <AnalogClock currentTime={currentTime} timezone={city.timezone} />
         )}
 
         <Link to="/" className="back-link">
@@ -120,5 +121,3 @@ function CityDetailPage() {
     </div>
   );
 }
-
-export default CityDetailPage;

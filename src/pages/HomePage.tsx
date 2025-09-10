@@ -1,21 +1,22 @@
-import React, { useMemo, useState, useEffect } from "react";
+// src/pages/HomePage.tsx
+import { useMemo, useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import TimeBadge from "../components/TimeBadge";
 import CurrentLocation from "../components/CurrentLocation";
-import AddCityForm from "../components/addCityForm";
+import AddCityForm from "../components/AddCityForm";
 
 import cities from "../data/cities.json";
-import type { City } from "../types/models";
-import { useNow } from "../hooks/useNow";
+import type { CityDraft, City } from "../types/models";
+import { usecurrentTime } from "../hooks/useCurrentTime";
 import { saveCities, loadCities } from "../utils/localStorage";
 import "../styles/globals.css";
 
-  function HomePage() {
+export default function HomePage() {
   const [query, setQuery] = useState<string>("");
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
-  const now = useNow(1000);
+  const currentTime = usecurrentTime(1000);
 
-  // Load selected cities from localStorage on mount
+  // Load selected cities from localStorage
   useEffect(() => {
     const saved = loadCities();
     setSelectedCities(saved);
@@ -31,8 +32,16 @@ import "../styles/globals.css";
     );
   }, [query]);
 
-   function handleAddCity(city: City) {
-    setSelectedCities((prev) => [...prev, city]);
+  // adds city from AddCityForm
+  function handleAddCity(cityDraft: CityDraft) {
+    const newCity: City = {
+      ...cityDraft,
+      id: crypto.randomUUID(), // Generate id here
+    };
+
+    const updated = [...selectedCities, newCity];
+    setSelectedCities(updated);
+    saveCities(updated);
   }
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -45,7 +54,7 @@ import "../styles/globals.css";
 
     const cityToAdd = results[0];
 
-    // Makes sure no duplicates
+    // stops duplicates
     if (!selectedCities.some((c) => c.id === cityToAdd.id)) {
       const newList = [...selectedCities, cityToAdd];
       setSelectedCities(newList);
@@ -64,17 +73,14 @@ import "../styles/globals.css";
       <h1 className="title">What time is it around the world?</h1>
 
       <SearchBar value={query} onChange={onChange} onSubmit={onSubmit} />
+
       
-      {/* Ny sektion för egna städer */}
       <h2>Add your own city</h2>
       <AddCityForm onAdd={handleAddCity} />
-
-
 
       <CurrentLocation />
 
       <h2>Valda städer</h2>
-      
       {selectedCities.length > 0 && (
         <section className="selected-cities">
           {selectedCities.map((city) => (
@@ -84,21 +90,15 @@ import "../styles/globals.css";
                 cityName={city.name}
                 country={city.country}
                 timezone={city.timezone}
-                now={now}
+                currentTime={currentTime}
+                removable
+                onRemove={() => removeCity(city.id)}
               />
-              <button
-                className="remove-btn"
-                onClick={() => removeCity(city.id)}
-                aria-label={`Remove ${city.name}`}
-              >
-                ×
-              </button>
             </div>
           ))}
         </section>
       )}
 
-      
       {query && results.length > 0 && (
         <section className="results">
           {results.map((city) => (
@@ -108,7 +108,7 @@ import "../styles/globals.css";
               cityName={city.name}
               country={city.country}
               timezone={city.timezone}
-              now={now}
+              currentTime={currentTime}
             />
           ))}
         </section>
@@ -116,5 +116,3 @@ import "../styles/globals.css";
     </div>
   );
 }
-
-export default HomePage;

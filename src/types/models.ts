@@ -3,18 +3,30 @@ export type TimeFormat = "digital" | "analog";
 
 
 export interface City {
-id: string; // slug or uuid
+id: string; 
 name: string; 
 country: string; 
 timezone: string; // string literal type below
-coordinates?: { lat: number; lng: number }; // optional for later map
-imageUrl?: string; // used on detail page later
+coordinates?: { lat: number; lng: number }; // might use for map feature later
+imageUrl?: string; 
 
 }
+// Utility type: used when adding a new city (not all fields required but some is)
+export type CityDraft = Pick<City, "name" | "country" | "timezone">; 
 
+
+// Type guard
+export function isCity(obj: unknown): obj is City {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&  
+    "name" in obj &&
+    "timezone" in obj
+  );
+}
 
 // String literal types for time zones we include in our dataset.
-// We can add to this list as needed.
 export type TimeZone =
 | "Europe/Stockholm"
 | "Europe/London"
@@ -33,6 +45,6 @@ export type TimeZone =
 
 
 export interface ClockSettings {
-format: TimeFormat; // digital or analog (we render digital for MVP)
+format: TimeFormat; // digital or analog 
 showSeconds: boolean;
 }

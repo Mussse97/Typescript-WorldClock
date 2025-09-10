@@ -1,6 +1,6 @@
 
 import { useMemo } from "react";
-import { useNow } from "../hooks/useNow";
+import { usecurrentTime } from "../hooks/useCurrentTime";
 import { getBrowserTimeZone } from "../utils/time";
 import cities from "../data/cities.json";
 import type { City } from "../types/models";
@@ -19,8 +19,8 @@ function pickCityForTimeZone(tz: string): City | null {
   return regionMatch ?? null;
 }
 
-function CurrentLocation() {
-  const now = useNow(1000);
+export default function CurrentLocation() {
+  const currentTime = usecurrentTime(1000);
   const tz = useMemo(() => getBrowserTimeZone(), []);
   const city = useMemo(() => pickCityForTimeZone(tz), [tz]);
 
@@ -29,7 +29,7 @@ function CurrentLocation() {
   return (
     <section aria-label="Current location time">
       <TimeSectionTitle title="Your location" />
-      <TimeRow city={city} now={now} />
+      <TimeRow city={city} currentTime={currentTime} />
     </section>
   );
 }
@@ -39,16 +39,15 @@ function TimeSectionTitle({ title }: { title: string }) {
   return <h3 style={{ margin: "16px 0 8px" }}>{title}</h3>;
 }
 
-function TimeRow({ city, now }: { city: City; now: Date }) {
+function TimeRow({ city, currentTime }: { city: City; currentTime: Date }) {
   return (
     <TimeBadge
       id={city.id}
       cityName={city.name}
       country={city.country}
       timezone={city.timezone}
-      now={now}
+      currentTime={currentTime}
     />
   );
 }
 
-export default CurrentLocation;
