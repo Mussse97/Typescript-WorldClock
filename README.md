@@ -63,6 +63,30 @@ När jag skissade gränssnittet tänkte jag på enkelhet och tydlighet. Fokus l�
   - TypeScript type guards fungerar genom att filtrera ogiltiga objekt.
   - Generiska `List` renderar korrekt för både `City[]` och `string[]`.
 
+## Fördelar med TypeScript i projektet
+
+I det här projektet har TypeScript gett flera konkreta fördelar jämfört med att enbart använda JavaScript:
+
+### 1. Utility types (`CityDraft`)
+Vi skapade en `CityDraft`-typ med hjälp av `Pick` för att bara inkludera de fält som behövs när en användare lägger till en ny stad (`name`, `country`, `timezone`).  
+➡️ Fördelen är att TypeScript tvingar oss att alltid använda rätt fält, och varnar oss direkt om något saknas eller skrivs fel. I JavaScript hade vi inte fått den kontrollen förrän i runtime.
+
+### 2. Type Guards (`isCity`)
+Vi implementerade en type guard-funktion `isCity(obj: unknown): obj is City`.  
+➡️ Detta gör att TypeScript kan avgöra om ett objekt verkligen är en `City` innan vi använder det. På så sätt undviker vi att råka anropa egenskaper på felaktiga objekt. I JavaScript hade samma misstag orsakat krascher i webbläsaren.
+
+### 3. Generics i listkomponenten
+Vi byggde en återanvändbar komponent `List<T>` som kan rendera olika typer av data.  
+➡️ Fördelen är att TypeScript säkerställer att vi bara skickar in korrekt typ av data. Om vi skickar felaktiga props får vi ett tydligt kompilatorfel. I JavaScript hade felet istället upptäckts först vid körning.
+
+---
+
+## Hur TypeScript transpileras till JavaScript
+Projektet använder Vite som byggverktyg. När vi kör `npm run dev` eller `npm run build` transpileras all TypeScript-kod (`.ts` och `.tsx`) till vanlig JavaScript.  
+- TypeScript-kompilatorn (`tsc`) analyserar koden statiskt, men själva typinformationen tas bort vid transpileringssteget.  
+- Webbläsaren kör alltså enbart den färdiga JavaScript-koden, medan vi som utvecklare får hjälp av typerna under utveckling.
+
+
 ## Responsiv design
 - CSS med flexbox och media queries för mobilvänligt gränssnitt.
 - Analog klocka och digital tid centreras och skalas efter skärmstorlek.
