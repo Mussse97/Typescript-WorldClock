@@ -16,7 +16,7 @@ När jag skissade gränssnittet tänkte jag på enkelhet och tydlighet. Fokus l�
 - Enkel navigering mellan hem- och detaljsida
 - Knappar för att växla mellan digital och analog klocka
 
-[Se Figma-skisser här](https://www.figma.com/) *(lägg in riktig länk)*
+[Se Figma-skisser här](https://www.figma.com/design/mQb3fiNk9EhruZ7JnBEFIA/WorldClock?node-id=0-1&t=VlnekdZ6dKwnGgUZ-1) 
 
 ## Struktur och komponenter
 
@@ -51,9 +51,8 @@ När jag skissade gränssnittet tänkte jag på enkelhet och tydlighet. Fokus l�
 
 ## Git-användning
 - Varje större funktion/ändring har committats med tydligt meddelande, t.ex.:
-  - `feat: add analog clock toggle`
-  - `fix: handle city detail localStorage bug`
-- Branching användes för större features.
+  - `Tillagt hemsida`
+  - `Localstarage implementerad`
 - Testade applikationen lokalt innan merge till main för att säkerställa att alla funktioner fungerade.
 
 ## Testning
