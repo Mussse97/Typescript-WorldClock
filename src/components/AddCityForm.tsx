@@ -10,7 +10,7 @@ export default function AddCityForm({ onAdd }: AddCityFormProps) {
   const [country, setCountry] = useState("");
   const [timezone, setTimezone] = useState("");
 
-  // Alla stödja tidszoner
+  // every timezone supported by the browser
   const timezones = Intl.supportedValuesOf("timeZone");
 
   function handleSubmit(e: React.FormEvent) {
@@ -25,7 +25,7 @@ export default function AddCityForm({ onAdd }: AddCityFormProps) {
 
     onAdd(newCity);
 
-    // Rensa formulärfält
+    // clear form fields
     setName("");
     setCountry("");
     setTimezone("");

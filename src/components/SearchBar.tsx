@@ -1,5 +1,6 @@
 import React from "react";
 
+// defining props for generic SearchBar component
 interface SearchBarProps<T> {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

@@ -2,6 +2,7 @@
 import { Link } from "react-router";
 import { formatLocalTime } from "../utils/time";
 
+// defining props for TimeBadge component
 interface TimeBadgeProps {
   id: string;
   cityName: string;
@@ -11,7 +12,7 @@ interface TimeBadgeProps {
   removable?: boolean;
   onRemove?: () => void;
 }
-
+// TimeBadge component to display city time and info
 export default function TimeBadge({
   id,
   cityName,

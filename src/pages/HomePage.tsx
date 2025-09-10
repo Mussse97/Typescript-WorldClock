@@ -1,9 +1,9 @@
-// src/pages/HomePage.tsx
 import { useMemo, useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import TimeBadge from "../components/TimeBadge";
 import CurrentLocation from "../components/CurrentLocation";
 import AddCityForm from "../components/AddCityForm";
+import { List } from "../components/List";
 
 import cities from "../data/cities.json";
 import type { CityDraft, City } from "../types/models";
@@ -22,6 +22,7 @@ export default function HomePage() {
     setSelectedCities(saved);
   }, []);
 
+  // Search results based on query
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [] as City[];
@@ -32,11 +33,11 @@ export default function HomePage() {
     );
   }, [query]);
 
-  // adds city from AddCityForm
+  // Add city from AddCityForm
   function handleAddCity(cityDraft: CityDraft) {
     const newCity: City = {
       ...cityDraft,
-      id: crypto.randomUUID(), // Generate id here
+      id: crypto.randomUUID(),
     };
 
     const updated = [...selectedCities, newCity];
@@ -54,7 +55,6 @@ export default function HomePage() {
 
     const cityToAdd = results[0];
 
-    // stops duplicates
     if (!selectedCities.some((c) => c.id === cityToAdd.id)) {
       const newList = [...selectedCities, cityToAdd];
       setSelectedCities(newList);
@@ -68,51 +68,68 @@ export default function HomePage() {
     saveCities(newList);
   }
 
-  return (
-    <div className="container">
-      <h1 className="title">What time is it around the world?</h1>
+ return (
+  <div className="container">
+    <h1 className="title">What time is it around the world?</h1>
 
+    {/* Search bar + autocomplete */}
+    <div className="search-container">
       <SearchBar value={query} onChange={onChange} onSubmit={onSubmit} />
+      {query && results.length > 0 && (
+        <ul className="autocomplete-list">
+          {results.map((city) => (
+            <li
+              key={city.id}
+              onClick={() => {
+               
+                if (!selectedCities.some((c) => c.id === city.id)) {
+                  const newList = [...selectedCities, city];
+                  setSelectedCities(newList);
+                  saveCities(newList);
+                }
+                setQuery(""); // clear search after adding
+              }}
+            >
+              {city.name}, {city.country}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
 
-      
-      <h2>Add your own city</h2>
-      <AddCityForm onAdd={handleAddCity} />
+    <h2>Add your own city</h2>
+    <AddCityForm onAdd={handleAddCity} />
 
-      <CurrentLocation />
+    <CurrentLocation />
 
-      <h2>Valda städer</h2>
-      {selectedCities.length > 0 && (
-        <section className="selected-cities">
-          {selectedCities.map((city) => (
-            <div key={city.id} className="city-card">
+    <h2>Valda städer</h2>
+    {selectedCities.length > 0 && (
+      <section className="selected-cities">
+        <List
+          items={selectedCities}
+          getKey={(city) => city.id}
+          renderItem={(city) => (
+            <div className="city-card">
               <TimeBadge
                 id={city.id}
                 cityName={city.name}
                 country={city.country}
                 timezone={city.timezone}
                 currentTime={currentTime}
-                removable
-                onRemove={() => removeCity(city.id)}
               />
+              <button
+                className="remove-btn"
+                onClick={() => removeCity(city.id)}
+                aria-label={`Remove ${city.name}`}
+              >
+                ×
+              </button>
             </div>
-          ))}
-        </section>
-      )}
+          )}
+        />
+      </section>
+    )}
+  </div>
+);
 
-      {query && results.length > 0 && (
-        <section className="results">
-          {results.map((city) => (
-            <TimeBadge
-              key={city.id}
-              id={city.id}
-              cityName={city.name}
-              country={city.country}
-              timezone={city.timezone}
-              currentTime={currentTime}
-            />
-          ))}
-        </section>
-      )}
-    </div>
-  );
 }

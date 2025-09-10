@@ -1,8 +1,8 @@
 .city-detail {
   display: flex;
-  justify-content: center;   /* Centra horisontellt */
-  align-items: center;       /* Centra vertikalt */
-  min-height: 100vh;         /* Gör så att det täcker hela skärmen */
+  justify-content: center;   
+  align-items: center;       
+  min-height: 100vh;         
   text-align: center;
   padding: 20px;
   box-sizing: border-box;
@@ -12,8 +12,8 @@
   background: rgba(0, 0, 0, 0.5);
   padding: 2rem;
   border-radius: 12px;
-  max-width: 600px;          /* Gör att den inte blir för bred på stora skärmar */
-  width: 100%;               /* Låt den krympa på små skärmar */
+  max-width: 600px;         
+  width: 100%;            
 }
 
 .city-detail h1 {
@@ -22,7 +22,7 @@
 
 .clock-toggle {
   display: flex;
-  justify-content: center;   /* Gör att knapparna ligger centrerade */
+  justify-content: center;   
   gap: 10px;
   margin: 1rem 0;
 }
